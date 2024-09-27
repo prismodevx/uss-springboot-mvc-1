@@ -32,8 +32,8 @@ public class Rol {
     @Column(name = "password", length = 100, nullable = false)
     private String password;
 
-//    @ManyToMany(mappedBy = "roles")
-//    private Set<Usuario> usuarios = new HashSet<>();
+    @ManyToMany(mappedBy = "roles")
+    private Set<Usuario> usuarios = new HashSet<>();
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)

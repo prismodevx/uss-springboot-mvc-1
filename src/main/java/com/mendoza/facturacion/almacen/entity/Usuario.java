@@ -20,12 +20,12 @@ public class Usuario {
     @Column(name = "nombre", length = 20, nullable = false)
     private String nombre;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    @JoinTable(
-//            name = "usuario_rol",
-//            joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
-//    private Set<Rol> roles = new HashSet<>();
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuario_rol",
+            joinColumns = @JoinColumn(name = "usuario_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "rol_id", referencedColumnName = "id"))
+    private Set<Rol> roles = new HashSet<>();
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
