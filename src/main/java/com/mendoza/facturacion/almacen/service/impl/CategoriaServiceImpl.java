@@ -65,6 +65,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     public void delete(int id) {
         try {
             Categoria registro = repository.findById(id).orElseThrow();
+            repository.delete(registro);
         } catch (Exception e) {
             throw e;
         }
