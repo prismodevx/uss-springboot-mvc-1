@@ -31,4 +31,22 @@ public class CategoriaController {
         Categoria registro = service.save(categoria);
         return ResponseEntity.ok(registro);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Categoria> update (@PathVariable("id") Integer id, @RequestBody Categoria categoria) {
+        Categoria registro = service.save(categoria);
+        return ResponseEntity.ok(registro);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Categoria> delete (@PathVariable("id") Integer id) {
+        service.delete(id);
+        return ResponseEntity.ok(null);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Categoria> findById (@PathVariable("id") Integer id) {
+        Categoria registro = service.findById(id);
+        return ResponseEntity.ok(registro);
+    }
 }
