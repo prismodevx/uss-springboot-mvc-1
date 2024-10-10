@@ -1,12 +1,12 @@
 package com.mendoza.facturacion.almacen.service.impl;
 
-import com.mendoza.facturacion.almacen.entity.Categoria;
+import com.mendoza.facturacion.almacen.entity.Permiso;
 import com.mendoza.facturacion.almacen.exception.GeneralException;
 import com.mendoza.facturacion.almacen.exception.NoDataFoundException;
 import com.mendoza.facturacion.almacen.exception.ValidateException;
-import com.mendoza.facturacion.almacen.repository.CategoriaRepository;
-import com.mendoza.facturacion.almacen.service.CategoriaService;
-import com.mendoza.facturacion.almacen.validator.CategoriaValidator;
+import com.mendoza.facturacion.almacen.repository.PermisoRepository;
+import com.mendoza.facturacion.almacen.service.PermisoService;
+import com.mendoza.facturacion.almacen.validator.PermisoValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,15 +15,15 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class CategoriaServiceImpl implements CategoriaService {
+public class PermisoServiceImpl implements PermisoService {
     @Autowired
-    private CategoriaRepository repository;
+    private PermisoRepository repository;
 
     @Override
     @Transactional(readOnly = true)
-    public List<Categoria> findAll(Pageable page) {
+    public List<Permiso> findAll(Pageable page) {
         try {
-            List<Categoria> registros = repository.findAll(page).toList();
+            List<Permiso> registros = repository.findAll(page).toList();
             return registros;
         } catch (ValidateException | NoDataFoundException e) {
             throw e;
@@ -34,9 +34,9 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Categoria> findByNombre(String nombre, Pageable page) {
+    public List<Permiso> findByNombre(String nombre, Pageable page) {
         try {
-            List<Categoria> registros = repository.findByNombreContaining(nombre, page);
+            List<Permiso> registros = repository.findByNombreContaining(nombre, page);
             return registros;
         } catch (ValidateException | NoDataFoundException e) {
             throw e;
@@ -47,9 +47,9 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional(readOnly = true)
-    public Categoria findById(int id) {
+    public Permiso findById(int id) {
         try {
-            Categoria registro = repository.findById(id)
+            Permiso registro = repository.findById(id)
                     .orElseThrow(() -> new NoDataFoundException("No existe un registro como ese id"));
             return registro;
         } catch (ValidateException | NoDataFoundException e) {
@@ -61,19 +61,18 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional
-    public Categoria save(Categoria categoria) {
+    public Permiso save(Permiso permiso) {
         try {
-            CategoriaValidator.save(categoria);
+            PermisoValidator.save(permiso);
 
-            if(categoria.getId() == 0) {
-                Categoria nuevo = repository.save(categoria);
+            if(permiso.getId() == 0) {
+                Permiso nuevo = repository.save(permiso);
                 return nuevo;
             }
 
-            Categoria registro = repository.findById(categoria.getId())
+            Permiso registro = repository.findById(permiso.getId())
                     .orElseThrow(() -> new NoDataFoundException("No existe un registro como ese id"));
-            registro.setNombre(categoria.getNombre());
-            registro.setDescripcion(categoria.getDescripcion());
+            registro.setNombre(permiso.getNombre());
             repository.save(registro);
 
             return registro;
@@ -84,11 +83,11 @@ public class CategoriaServiceImpl implements CategoriaService {
         }
     }
 
-    @Transactional
     @Override
+    @Transactional
     public void delete(int id) {
         try {
-            Categoria registro = repository.findById(id)
+            Permiso registro = repository.findById(id)
                     .orElseThrow(() -> new NoDataFoundException("No existe un registro como ese id"));
             repository.delete(registro);
         } catch (ValidateException | NoDataFoundException e) {
