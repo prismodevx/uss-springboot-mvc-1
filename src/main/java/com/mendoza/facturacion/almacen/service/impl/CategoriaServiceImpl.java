@@ -1,8 +1,12 @@
 package com.mendoza.facturacion.almacen.service.impl;
 
 import com.mendoza.facturacion.almacen.entity.Categoria;
+import com.mendoza.facturacion.almacen.exception.GeneralException;
+import com.mendoza.facturacion.almacen.exception.NoDataFoundException;
+import com.mendoza.facturacion.almacen.exception.ValidateException;
 import com.mendoza.facturacion.almacen.repository.CategoriaRepository;
 import com.mendoza.facturacion.almacen.service.CategoriaService;
+import com.mendoza.facturacion.almacen.validator.CategoriaValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,8 +23,10 @@ public class CategoriaServiceImpl implements CategoriaService {
         try {
             List<Categoria> registros = repository.findAll(page).toList();
             return registros;
-        } catch (Exception e) {
+        } catch (ValidateException | NoDataFoundException e) {
             throw e;
+        } catch (GeneralException e) {
+            throw new GeneralException("Error del servidor");
         }
     }
 
@@ -29,45 +35,60 @@ public class CategoriaServiceImpl implements CategoriaService {
         try {
             List<Categoria> registros = repository.findByNombreContaining(nombre, page);
             return registros;
-        } catch (Exception e) {
+        } catch (ValidateException | NoDataFoundException e) {
             throw e;
+        } catch (GeneralException e) {
+            throw new GeneralException("Error del servidor");
         }
     }
 
     @Override
     public Categoria findById(int id) {
         try {
-            Categoria registro = repository.findById(id).orElseThrow();
+            Categoria registro = repository.findById(id)
+                    .orElseThrow(() -> new NoDataFoundException("No existe un registro como ese id"));
             return registro;
-        } catch (Exception e) {
+        } catch (ValidateException | NoDataFoundException e) {
             throw e;
+        } catch (GeneralException e) {
+            throw new GeneralException("Error del servidor");
         }
     }
 
     @Override
     public Categoria save(Categoria categoria) {
         try {
+            CategoriaValidator.save(categoria);
+
             if(categoria.getId() == 0) {
                 Categoria nuevo = repository.save(categoria);
                 return nuevo;
             }
-            Categoria registro = repository.findById(categoria.getId()).orElseThrow();
+
+            Categoria registro = repository.findById(categoria.getId())
+                    .orElseThrow(() -> new NoDataFoundException("No existe un registro como ese id"));
             registro.setNombre(categoria.getNombre());
             registro.setDescripcion(categoria.getDescripcion());
             repository.save(registro);
+
             return registro;
-        } catch (Exception e) {
+        } catch (ValidateException | NoDataFoundException e) {
             throw e;
+        } catch (GeneralException e) {
+            throw new GeneralException("Error del servidor");
         }
     }
 
     @Override
     public void delete(int id) {
         try {
-            Categoria registro = repository.findById(id).orElseThrow();
+            Categoria registro = repository.findById(id)
+                    .orElseThrow(() -> new NoDataFoundException("No existe un registro como ese id"));
             repository.delete(registro);
-        } catch (Exception e) {
+        } catch (ValidateException | NoDataFoundException e) {
             throw e;
+        } catch (GeneralException e) {
+            throw new GeneralException("Error del servidor");
         }
     }
 }
