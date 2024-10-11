@@ -28,7 +28,7 @@ public class CategoriaServiceImpl implements CategoriaService {
         } catch (ValidateException | NoDataFoundException e) {
             throw e;
         } catch (GeneralException e) {
-            throw new GeneralException("Error del servidor");
+            throw new GeneralException("Error del servidorr");
         }
     }
 
