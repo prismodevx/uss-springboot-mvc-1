@@ -90,7 +90,29 @@ function getTabla() {
                         <button type="button" class="btn btn-danger btn-sm eliminar">
                             <i class="fas fa-trash"></i>
                         </button>`;
-                    t.row.add([botonera, registro.id, registro.nombre, registro.tipoDocumento, registro.numeroDocumento,registro.telefono, registro.email]);
+                    let r;
+
+                    if(registro.tipoDocumento == 1) {
+                        r = "Documento no domiciliado sin RUC";
+                    }
+                    switch (registro.tipoDocumento) {
+                        case "0":
+                            r = "Documento no domiciliado sin RUC";
+                            break;
+                        case "1":
+                            r = "DNI";
+                            break;
+                        case "4":
+                            r = "Carnet de Extranjeria";
+                            break;
+                        case "6":
+                            r = "RUC";
+                            break;
+                        case "7":
+                            r = "Pasaporte";
+                            break;
+                    }
+                    t.row.add([botonera, registro.id, registro.nombre, r, registro.numeroDocumento,registro.telefono, registro.email]);
                 });
                 t.draw(false);
             } else {
