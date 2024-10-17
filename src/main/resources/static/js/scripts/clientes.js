@@ -1,4 +1,4 @@
-const url = "/v1/categorias";
+const url = "/v1/clientes";
 
 function ajaxRequest(type, endpoint, data = null) {
     return $.ajax({
@@ -17,7 +17,10 @@ function save(bandera) {
     const registro = {
         id,
         nombre: $("#nombre").val(),
-        descripcion: $("#descripcion").val(),
+        tipoDocumento: $("#tipoDocumento").val(),
+        numeroDocumento: $("#numeroDocumento").val(),
+        telefono: $("#telefono").val(),
+        email: $("#email").val(),
     };
 
     const type = bandera === 1 ? "POST" : "PUT";
@@ -28,7 +31,7 @@ function save(bandera) {
             if (data.ok) {
                 $("#modal-update").modal("hide");
                 getTabla();
-				$("#error-message").addClass("d-none");
+                $("#error-message").addClass("d-none");
                 Swal.fire({
                     icon: 'success',
                     title: `Se ha ${bandera === 1 ? 'guardado' : 'actualizado'} el registro`,
@@ -40,9 +43,9 @@ function save(bandera) {
                 showError(data.message);
             }
         }).fail(function (jqXHR) {
-		   let errorMessage = jqXHR.responseJSON && jqXHR.responseJSON.message ? jqXHR.responseJSON.message : "Error inesperado. Código: " + jqXHR.status;
-		   showError(errorMessage);
-		});
+        let errorMessage = jqXHR.responseJSON && jqXHR.responseJSON.message ? jqXHR.responseJSON.message : "Error inesperado. Código: " + jqXHR.status;
+        showError(errorMessage);
+    });
 }
 
 function showError(message) {
@@ -81,13 +84,13 @@ function getTabla() {
             if (data.ok) {
                 $.each(data.body, (index, registro) => {
                     const botonera = `
-                        <button type="button" class="btn btn-warning btn-xs editar">
+                        <button type="button" class="btn btn-warning btn-sm editar">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button type="button" class="btn btn-danger btn-xs eliminar">
+                        <button type="button" class="btn btn-danger btn-sm eliminar">
                             <i class="fas fa-trash"></i>
                         </button>`;
-                    t.row.add([botonera, registro.id, registro.nombre, registro.descripcion]);
+                    t.row.add([botonera, registro.id, registro.nombre, registro.tipoDocumento, registro.numeroDocumento,registro.telefono, registro.email]);
                 });
                 t.draw(false);
             } else {
@@ -103,7 +106,10 @@ function getFila(id) {
             if (data.ok) {
                 $("#modal-title").text("Editar registro");
                 $("#nombre").val(data.body.nombre);
-                $("#descripcion").val(data.body.descripcion);
+                $("#tipoDocumento").val(data.body.tipoDocumento);
+                $("#numeroDocumento").val(data.body.numeroDocumento);
+                $("#telefono").val(data.body.telefono);
+                $("#email").val(data.body.email);
                 $("#guardar").data("id", data.body.id).data("bandera", 0);
                 $("#modal-update").modal("show");
             } else {
@@ -116,7 +122,11 @@ function getFila(id) {
 function clear() {
     $("#modal-title").text("Nuevo registro");
     $("#nombre").val("");
-    $("#descripcion").val("");
+    $("#tipoDocumento").val("");
+    $("#numeroDocumento").val("");
+    $("#email").val("");
+    $("#telefono").val("");
+
     $("#guardar").data("id", 0).data("bandera", 1);
 }
 
@@ -153,7 +163,7 @@ $(document).ready(function () {
     clear();
 
     $("#nuevo").click(clear);
-    
+
     $("#guardar").click(() => save($("#guardar").data("bandera")));
 
     $(document).on('click', '.eliminar', function () {
@@ -179,8 +189,8 @@ $(document).ready(function () {
     });
 
     getTabla();
-	
-	$('#liAlmacen').addClass("menu-open");
-	$('#liCategoria').addClass("active");
+
+    $('#liAlmacen').addClass("menu-open");
+    $('#liCliente').addClass("active");
 
 });

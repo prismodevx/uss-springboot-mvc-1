@@ -1,12 +1,14 @@
 package com.mendoza.facturacion.almacen.service.impl;
 
 import com.mendoza.facturacion.almacen.entity.Categoria;
+import com.mendoza.facturacion.almacen.entity.Cliente;
 import com.mendoza.facturacion.almacen.exception.GeneralException;
 import com.mendoza.facturacion.almacen.exception.NoDataFoundException;
 import com.mendoza.facturacion.almacen.exception.ValidateException;
-import com.mendoza.facturacion.almacen.repository.CategoriaRepository;
-import com.mendoza.facturacion.almacen.service.CategoriaService;
+import com.mendoza.facturacion.almacen.repository.ClienteRepository;
+import com.mendoza.facturacion.almacen.service.ClienteService;
 import com.mendoza.facturacion.almacen.validator.CategoriaValidator;
+import com.mendoza.facturacion.almacen.validator.ClienteValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,15 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class CategoriaServiceImpl implements CategoriaService {
+public class ClienteServiceImpl implements ClienteService {
     @Autowired
-    private CategoriaRepository repository;
+    private ClienteRepository repository;
 
     @Override
-    @Transactional(readOnly = true)
-    public List<Categoria> findAll(Pageable page) {
+    public List<Cliente> findAll(Pageable page) {
         try {
-            List<Categoria> registros = repository.findAll(page).toList();
+            List<Cliente> registros = repository.findAll(page).toList();
             return registros;
         } catch (ValidateException | NoDataFoundException e) {
             throw e;
@@ -33,9 +34,9 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     @Override
-    public List<Categoria> findAll() {
+    public List<Cliente> findAll() {
         try {
-            List<Categoria> registros = repository.findAll();
+            List<Cliente> registros = repository.findAll();
             return registros;
         } catch (ValidateException | NoDataFoundException e) {
             throw e;
@@ -46,9 +47,9 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Categoria> findByNombre(String nombre, Pageable page) {
+    public List<Cliente> findByNombre(String nombre, Pageable page) {
         try {
-            List<Categoria> registros = repository.findByNombreContaining(nombre, page);
+            List<Cliente> registros = repository.findByNombreContaining(nombre, page);
             return registros;
         } catch (ValidateException | NoDataFoundException e) {
             throw e;
@@ -59,9 +60,9 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional(readOnly = true)
-    public Categoria findById(int id) {
+    public Cliente findById(int id) {
         try {
-            Categoria registro = repository.findById(id)
+            Cliente registro = repository.findById(id)
                     .orElseThrow(() -> new NoDataFoundException("No existe un registro como ese id"));
             return registro;
         } catch (ValidateException | NoDataFoundException e) {
@@ -73,19 +74,22 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     @Override
     @Transactional
-    public Categoria save(Categoria categoria) {
+    public Cliente save(Cliente cliente) {
         try {
-            CategoriaValidator.save(categoria);
+            ClienteValidator.save(cliente);
 
-            if(categoria.getId() == 0) {
-                Categoria nuevo = repository.save(categoria);
+            if(cliente.getId() == 0) {
+                Cliente nuevo = repository.save(cliente);
                 return nuevo;
             }
 
-            Categoria registro = repository.findById(categoria.getId())
+            Cliente registro = repository.findById(cliente.getId())
                     .orElseThrow(() -> new NoDataFoundException("No existe un registro como ese id"));
-            registro.setNombre(categoria.getNombre());
-            registro.setDescripcion(categoria.getDescripcion());
+            registro.setNombre(cliente.getNombre());
+            registro.setTipoDocumento(cliente.getTipoDocumento());
+            registro.setNumeroDocumento(cliente.getNumeroDocumento());
+            registro.setTelefono(cliente.getTelefono());
+            registro.setEmail(cliente.getEmail());
             repository.save(registro);
 
             return registro;
@@ -100,7 +104,7 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Transactional
     public void delete(int id) {
         try {
-            Categoria registro = repository.findById(id)
+            Cliente registro = repository.findById(id)
                     .orElseThrow(() -> new NoDataFoundException("No existe un registro como ese id"));
             repository.delete(registro);
         } catch (ValidateException | NoDataFoundException e) {

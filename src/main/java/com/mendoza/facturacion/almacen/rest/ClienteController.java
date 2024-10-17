@@ -1,9 +1,14 @@
 package com.mendoza.facturacion.almacen.rest;
 
+import ch.qos.logback.core.net.server.Client;
 import com.mendoza.facturacion.almacen.converter.CategoriaConverter;
+import com.mendoza.facturacion.almacen.converter.ClienteConverter;
 import com.mendoza.facturacion.almacen.dto.CategoriaDto;
+import com.mendoza.facturacion.almacen.dto.ClienteDto;
 import com.mendoza.facturacion.almacen.entity.Categoria;
+import com.mendoza.facturacion.almacen.entity.Cliente;
 import com.mendoza.facturacion.almacen.service.CategoriaService;
+import com.mendoza.facturacion.almacen.service.ClienteService;
 import com.mendoza.facturacion.almacen.util.WrapperResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -15,38 +20,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/categorias")
-public class CategoriaController {
+@RequestMapping("/v1/clientes")
+public class ClienteController {
     @Autowired
-    private CategoriaService service;
+    private ClienteService service;
 
     @Autowired
-    private CategoriaConverter converter;
+    private ClienteConverter converter;
 
     @GetMapping
-    public ResponseEntity<List<CategoriaDto>> findAll(
+    public ResponseEntity<List<ClienteDto>> findAll(
             @RequestParam(value = "offset", required = false, defaultValue = "0") int pageNumber,
             @RequestParam(value = "limit", required = false, defaultValue = "5") int pageSize
     ) {
         Pageable page = PageRequest.of(pageNumber, pageSize);
-        List<CategoriaDto> categorias = converter.fromEntities(service.findAll());
-//        return ResponseEntity.ok(categorias);
-        return new WrapperResponse(true, "success", categorias).createResponse(HttpStatus.OK);
+        List<ClienteDto> clientes = converter.fromEntities(service.findAll());
+
+        return new WrapperResponse(true, "success", clientes).createResponse(HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<CategoriaDto> create (@RequestBody CategoriaDto categoria) {
-        Categoria entity = converter.fromDTO(categoria);
-        CategoriaDto dto = converter.fromEntity(service.save(entity));
-//        return ResponseEntity.ok(dto);
+    public ResponseEntity<CategoriaDto> create (@RequestBody ClienteDto cliente) {
+        Cliente entity = converter.fromDTO(cliente);
+        ClienteDto dto = converter.fromEntity(service.save(entity));
+
         return new WrapperResponse(true, "success", dto).createResponse(HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CategoriaDto> update (@PathVariable("id") int id, @RequestBody CategoriaDto categoria) {
-        Categoria entity = converter.fromDTO(categoria);
-        CategoriaDto dto = converter.fromEntity(service.save(entity));
-//        return ResponseEntity.ok(dto);
+    public ResponseEntity<CategoriaDto> update (@PathVariable("id") int id, @RequestBody ClienteDto cliente) {
+        Cliente entity = converter.fromDTO(cliente);
+        ClienteDto dto = converter.fromEntity(service.save(entity));
+
         return new WrapperResponse(true, "success", dto).createResponse(HttpStatus.OK);
     }
 
@@ -59,9 +64,8 @@ public class CategoriaController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CategoriaDto> findById (@PathVariable("id") int id) {
-        CategoriaDto dto = converter.fromEntity(service.findById(id));
+        ClienteDto dto = converter.fromEntity(service.findById(id));
 
-//        return ResponseEntity.ok(dto);
         return new WrapperResponse(true, "success", dto).createResponse(HttpStatus.OK);
     }
 }
