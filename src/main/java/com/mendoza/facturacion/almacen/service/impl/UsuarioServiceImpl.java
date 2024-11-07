@@ -100,13 +100,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public int deactivate(int id) {
+    public Usuario deactivate(int id) {
         try {
             Usuario registro = repository.findById(id)
                     .orElseThrow(() -> new NoDataFoundException("No existe un registro con ese ID"));
             registro.setActivo(false);
             repository.save(registro);
-            return 1;
+            return registro;
         } catch (ValidateException | NoDataFoundException e) {
             throw e;
         } catch (GeneralException e) {
@@ -116,13 +116,13 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     @Transactional
-    public int activate(int id) {
+    public Usuario activate(int id) {
         try {
             Usuario registro = repository.findById(id)
                     .orElseThrow(() -> new NoDataFoundException("No existe un registro con ese ID"));
             registro.setActivo(true);
             repository.save(registro);
-            return 1;
+            return registro;
         } catch (ValidateException | NoDataFoundException e) {
             throw e;
         } catch (GeneralException e) {

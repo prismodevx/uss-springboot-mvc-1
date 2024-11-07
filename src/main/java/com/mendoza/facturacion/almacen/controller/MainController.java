@@ -15,6 +15,11 @@ public class MainController {
         return "categorias";
     }
 
+    @GetMapping("/usuarios")
+    public String usuarios() {
+        return "usuarios";
+    }
+
     @GetMapping("/clientes")
     public String clientes() {
         return "clientes";

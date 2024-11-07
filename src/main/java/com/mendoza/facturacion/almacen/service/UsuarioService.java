@@ -11,6 +11,6 @@ public interface UsuarioService {
     public Usuario findByEmail(String email);
     public Usuario findById(int id);
     public Usuario save(Usuario usuario);
-    public int deactivate(int id);
-    public int activate(int id);
+    public Usuario deactivate(int id);
+    public Usuario activate(int id);
 }
