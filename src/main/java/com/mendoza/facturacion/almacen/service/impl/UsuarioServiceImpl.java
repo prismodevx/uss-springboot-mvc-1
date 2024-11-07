@@ -6,6 +6,7 @@ import com.mendoza.facturacion.almacen.exception.NoDataFoundException;
 import com.mendoza.facturacion.almacen.exception.ValidateException;
 import com.mendoza.facturacion.almacen.repository.UsuarioRepository;
 import com.mendoza.facturacion.almacen.service.UsuarioService;
+import com.mendoza.facturacion.almacen.util.Encoder;
 import com.mendoza.facturacion.almacen.validator.UsuarioValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,9 @@ import java.util.List;
 public class UsuarioServiceImpl implements UsuarioService {
     @Autowired
     private UsuarioRepository repository;
+
+    @Autowired
+    private Encoder encoder;
 
     @Override
     @Transactional(readOnly = true)
@@ -82,13 +86,14 @@ public class UsuarioServiceImpl implements UsuarioService {
             UsuarioValidator.save(usuario);
             if(usuario.getId() == 0) {
                 usuario.setActivo(true);
+                usuario.setPassword(encoder.encode(usuario.getPassword()));
                 Usuario nuevo = repository.save(usuario);
                 return nuevo;
             }
             Usuario registro = repository.findById(usuario.getId())
                     .orElseThrow(() -> new NoDataFoundException("No existe un registro con ese ID"));
             registro.setEmail(usuario.getEmail());
-            registro.setPassword(usuario.getPassword());
+            registro.setPassword(encoder.encode(usuario.getPassword()));
             repository.save(registro);
             return registro;
         } catch (ValidateException | NoDataFoundException e) {
