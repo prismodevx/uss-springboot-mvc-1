@@ -25,12 +25,12 @@
         <!-- Messages Dropdown Menu -->
         <li class="nav-item dropdown">
             <a class="nav-link" data-toggle="dropdown" href="#">
-                <i class="fa fa-user text-warning"></i> Usuario
+                <i class="fa fa-user text-warning"></i> <span th:text="${usuario}"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <a href="#" class="dropdown-item text-sm"><i class="fas fa-user-cog text-primary"></i> Perfil</a>
                 <div class="dropdown-divider"></div>
-                <a href="#" class="dropdown-item dropdown-footer"><i class="fas fa-sign-out-alt text-danger"></i> Cerrar
+                <a href="/logout" class="dropdown-item dropdown-footer"><i class="fas fa-sign-out-alt text-danger"></i> Cerrar
                     sesión</a>
             </div>
         </li>
@@ -142,7 +142,7 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
+                        <li class="nav-item" th:if="${roles.contains('ROLE_ADMIN')}">
                             <a id="liUsuario" href="/usuarios" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Usuarios</p>
