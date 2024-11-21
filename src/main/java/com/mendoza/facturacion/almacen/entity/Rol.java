@@ -24,4 +24,8 @@ public class Rol {
 
     @Column(name = "nombre", length = 20, nullable = false)
     private String nombre;
+
+    public Rol(int id) {
+        this.id = id;
+    }
 }

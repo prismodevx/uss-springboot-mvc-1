@@ -14,10 +14,13 @@ function ajaxRequest(type, endpoint, data = null) {
 
 function save(bandera) {
     const id = $("#guardar").data("id");
+    const selectedRoles = $('#roles').val().map(e => parseInt(e));
+    console.log(selectedRoles);
     const registro = {
         id,
         email: $("#email").val(),
         password: $("#password").val(),
+        roles: selectedRoles
     };
 
     const type = bandera === 1 ? "POST" : "PUT";

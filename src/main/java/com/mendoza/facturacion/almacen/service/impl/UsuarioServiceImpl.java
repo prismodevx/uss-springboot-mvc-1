@@ -1,5 +1,6 @@
 package com.mendoza.facturacion.almacen.service.impl;
 
+import com.mendoza.facturacion.almacen.entity.Rol;
 import com.mendoza.facturacion.almacen.entity.Usuario;
 import com.mendoza.facturacion.almacen.exception.GeneralException;
 import com.mendoza.facturacion.almacen.exception.NoDataFoundException;
@@ -13,7 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -87,6 +90,13 @@ public class UsuarioServiceImpl implements UsuarioService {
             if(usuario.getId() == 0) {
                 usuario.setActivo(true);
                 usuario.setPassword(encoder.encode(usuario.getPassword()));
+                Set<Rol> roles = usuario.getRoles();
+
+                System.out.println(roles);
+                if (roles != null && !roles.isEmpty()) {
+                    usuario.setRoles(roles);
+                }
+
                 Usuario nuevo = repository.save(usuario);
                 return nuevo;
             }
@@ -94,6 +104,7 @@ public class UsuarioServiceImpl implements UsuarioService {
                     .orElseThrow(() -> new NoDataFoundException("No existe un registro con ese ID"));
             registro.setEmail(usuario.getEmail());
             registro.setPassword(encoder.encode(usuario.getPassword()));
+//            registro.setRoles(usuario.getRoles());
             repository.save(registro);
             return registro;
         } catch (ValidateException | NoDataFoundException e) {
