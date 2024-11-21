@@ -102,6 +102,7 @@ function getTabla() {
 
             if (data.ok) {
                 $.each(data.body, (index, registro) => {
+                    const roles = registro.roles.map(role => role.nombre).join(', ');
                     let botonera = `
                         <button type="button" class="btn btn-warning btn-xs editar">
                             <i class="fas fa-edit"></i>
@@ -117,7 +118,7 @@ function getTabla() {
                     }
 
 
-                    t.row.add([botonera, registro.id, registro.email, registro.activo]);
+                    t.row.add([botonera, registro.id, registro.email, roles, registro.activo]);
                 });
                 t.draw(false);
             } else {

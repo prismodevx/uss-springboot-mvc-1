@@ -2,6 +2,8 @@ package com.mendoza.facturacion.almacen.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -10,6 +12,6 @@ import lombok.*;
 public class UsuarioDto {
     private int id;
     private String email;
-    private String password;
     private boolean activo;
+    private List<RolDto> roles;
 }
